@@ -1,5 +1,8 @@
-const { app, BrowserWindow, ipcMain, desktopCapturer } = require('electron');
+const { app, BrowserWindow, ipcMain, desktopCapturer ,Menu} = require('electron');
 const path = require('path');
+
+app.disableHardwareAcceleration();
+
 
 let mainWindow;
 
@@ -45,10 +48,12 @@ function createMenu() {
     const defautlMenu = Menu.getApplicationMenu();
     const viewMenu = defautlMenu.items.find(item => item.label === 'View');
     if (viewMenu && viewMenu.submenu) {
-        viewMenu.submenu.push({
+        const submenuItems = Array.from(viewMenu.submenu.items);
+        submenuItems.push({
             label: 'Open DevTools',
             click: () => mainWindow.webContents.openDevTools(),
         });
+        viewMenu.submenu.items = submenuItems;
     }
     Menu.setApplicationMenu(defautlMenu);
 }
